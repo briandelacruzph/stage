@@ -28,7 +28,7 @@ Download the binary for your platform from the [Releases](../../releases) page, 
 ### Debian / Ubuntu
 
 ```bash
-curl -L https://github.com/briandelacruzph/stage/releases/latest/download/stage.deb-ubuntu -o stage && sudo mv stage /usr/local/bin/stage && sudo chmod +x /usr/local/bin/stage
+curl -L https://github.com/briandelacruzph/stage/releases/latest/download/stage.ubuntu-deb -o stage && sudo mv stage /usr/local/bin/stage && sudo chmod +x /usr/local/bin/stage
 ```
 
 ### Fedora / RHEL
