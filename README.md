@@ -43,28 +43,37 @@ That is it. The backup is on your machine, in your folder, in a format you under
 
 ### Comments Are Optional
 
-Stage auto-generates a comment for every backup if you do not supply one. For incremental backups, it summarizes the changed files. For full backups, it uses the date, time, and file count. You never have to think about what to write — just run the command.
+Stage auto-generates a comment for every backup if you do not supply one. It uses backup's own stage version timestamp, so comment always matches version shown in `stage -list`. You never have to think about what to write — just run command.
 
 ```bash
-stage -add                          # comment auto-generated from changed files
+stage -add                          # comment auto-generated from stage version
 stage -add "fixed auth bug"         # or write your own
-stage -full                         # comment auto-generated from date/time/count
+stage -full                         # comment auto-generated from stage version
 stage -full "before major refactor" # or write your own
 ```
 
 ### Git Integration as Off-Site Redundancy
 
-Stage keeps backups local by default, but enabling Git integration adds an automatic off-site copy to a private GitHub repository. Every time you run a backup, Stage commits and pushes to your repo in the background — no extra commands needed.
+Stage keeps backups local by default, but enabling Git integration adds an off-site copy to a private GitHub repository. During `stage -init`, you choose sync mode:
+
+- **Manual** (default) — backups stay local unless you add `-git`
+- **Auto** — every `stage -add` / `stage -full` also commits and pushes
 
 This protects against the scenario where your local machine or backup drive is lost, corrupted, or accidentally deleted. Your backup history is also in GitHub, accessible from anywhere.
 
 Stage handles the entire Git workflow for you:
 - Commits the backup using your comment (or auto-generated one) as the commit message.
 - Pushes to your configured private repository.
-- No `git add`, `git commit`, or `git push` needed — Stage does it all.
+- No manual `git add`, `git commit`, or `git push` needed.
 
 ```bash
-# With Git enabled, this single command backs up locally AND pushes to GitHub
+# Manual sync mode: local backup only
+stage -add "stable before API refactor"
+
+# Manual sync mode: local backup + GitHub sync
+stage -add "stable before API refactor" -git
+
+# Auto sync mode: this also pushes to GitHub
 stage -add "stable before API refactor"
 ```
 
@@ -129,8 +138,8 @@ stage -retain 30
 - **Auto-Purge** — Automatically purges stale backups on every run. Configure once: `stage -change auto-purge <days>`.
 - **Ignore Rules (`-ignore`)** — Exclude files and folders from backups. Git-enabled projects can sync exclusions to `.gitignore`.
 - **Configuration Management (`-change`)** — View and update any Stage configuration variable.
-- **Optional Git Sync** — Push every backup to a private GitHub repository for off-site redundancy.
-- **Reconfigure Git (`-reconfigure git`)** — Update remote URL, token, identity, or sync scope without reinitializing.
+- **Optional Git Sync** — Push backups to a private GitHub repository either manually with `-git` or automatically in auto sync mode.
+- **Reconfigure Git (`-reconfigure git`)** — Update remote URL, token, identity, or sync mode without reinitializing.
 - **Release (`-release`)** — Tags a version, triggers GitHub Actions to build platform-specific binaries for Windows, Linux, and macOS, and attaches them to a GitHub Release. Falls back to local compilation if Git is not enabled. Python projects only. See [Release](#releasing-a-version-python-projects) below.
 
 ---
@@ -213,14 +222,20 @@ curl -L https://github.com/briandelacruzph/stage/releases/latest/download/stage.
 # Set up Stage in your project
 stage -init
 
-# Back up changed files (comment auto-generated)
+# Back up changed files locally (comment auto-generated from stage version)
 stage -add
+
+# Back up changed files and also sync to git (manual sync mode)
+stage -add -git
 
 # Back up with an optional comment
 stage -add "fixed login bug"
 
-# Force a full backup (comment auto-generated)
+# Force a full backup locally (comment auto-generated from stage version)
 stage -full
+
+# Force a full backup and also sync to git (manual sync mode)
+stage -full -git
 
 # Full backup with an optional comment
 stage -full "before major refactor"
