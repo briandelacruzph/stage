@@ -140,6 +140,7 @@ stage -retain 30
 - **Configuration Management (`-change`)** — View and update any Stage configuration variable.
 - **Optional Git Sync** — Push backups to a private GitHub repository either manually with `-git` or automatically in auto sync mode.
 - **Reconfigure Git (`-reconfigure git`)** — Update remote URL, token, identity, or sync mode without reinitializing.
+- **Version Check (`-version`)** — Show your current Stage version and check whether a newer GitHub release is available.
 - **Release (`-release`)** — Tags a version, triggers GitHub Actions to build platform-specific binaries for Windows, Linux, and macOS, and attaches them to a GitHub Release. Falls back to local compilation if Git is not enabled. Python projects only. See [Release](#releasing-a-version-python-projects) below.
 
 ---
@@ -185,7 +186,7 @@ Download the binary for your platform from the [Releases](../../releases) page, 
 ### Debian / Ubuntu
 
 ```bash
-curl -L https://github.com/briandelacruzph/stage/releases/latest/download/stage.ubuntu-deb -o stage && sudo mv stage /usr/local/bin/stage && sudo chmod +x /usr/local/bin/stage
+curl -L https://github.com/briandelacruzph/stage/releases/latest/download/stage.ubuntu-debian -o stage && sudo mv stage /usr/local/bin/stage && sudo chmod +x /usr/local/bin/stage
 ```
 
 ### Fedora / RHEL
@@ -221,6 +222,9 @@ curl -L https://github.com/briandelacruzph/stage/releases/latest/download/stage.
 ```bash
 # Set up Stage in your project
 stage -init
+
+# Check installed version and latest release
+stage -version
 
 # Back up changed files locally (comment auto-generated from stage version)
 stage -add
@@ -266,7 +270,7 @@ stage -release
 
 ## Usage
 
-Run `stage -h` or `stage --help` for the full command reference and troubleshooting guide.
+Run `stage -h` or `stage -help` for the full command reference and troubleshooting guide.
 
 ---
 
